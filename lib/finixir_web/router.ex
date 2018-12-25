@@ -24,5 +24,8 @@ defmodule FinixirWeb.Router do
     pipe_through :api
 
     resources "/parties", PartyController, except: [:new, :edit]
+    resources "/transaction_types", TransactionTypeController, except: [:new, :edit]
+    resources "/transactions", TransactionController, except: [:new, :edit]
+    resources "/parties_tags", PartyTagController, except: [:new, :edit]
   end
 end
