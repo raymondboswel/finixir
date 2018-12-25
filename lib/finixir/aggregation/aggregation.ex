@@ -485,4 +485,100 @@ defmodule Finixir.Aggregation do
   def change_party_tag(%PartyTag{} = party_tag) do
     PartyTag.changeset(party_tag, %{})
   end
+
+  alias Finixir.Aggregation.TransactionSet
+
+  @doc """
+  Returns the list of transaction_sets.
+
+  ## Examples
+
+      iex> list_transaction_sets()
+      [%TransactionSet{}, ...]
+
+  """
+  def list_transaction_sets do
+    Repo.all(TransactionSet)
+  end
+
+  @doc """
+  Gets a single transaction_set.
+
+  Raises `Ecto.NoResultsError` if the Transaction set does not exist.
+
+  ## Examples
+
+      iex> get_transaction_set!(123)
+      %TransactionSet{}
+
+      iex> get_transaction_set!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_transaction_set!(id), do: Repo.get!(TransactionSet, id)
+
+  @doc """
+  Creates a transaction_set.
+
+  ## Examples
+
+      iex> create_transaction_set(%{field: value})
+      {:ok, %TransactionSet{}}
+
+      iex> create_transaction_set(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_transaction_set(attrs \\ %{}) do
+    %TransactionSet{}
+    |> TransactionSet.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a transaction_set.
+
+  ## Examples
+
+      iex> update_transaction_set(transaction_set, %{field: new_value})
+      {:ok, %TransactionSet{}}
+
+      iex> update_transaction_set(transaction_set, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_transaction_set(%TransactionSet{} = transaction_set, attrs) do
+    transaction_set
+    |> TransactionSet.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a TransactionSet.
+
+  ## Examples
+
+      iex> delete_transaction_set(transaction_set)
+      {:ok, %TransactionSet{}}
+
+      iex> delete_transaction_set(transaction_set)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_transaction_set(%TransactionSet{} = transaction_set) do
+    Repo.delete(transaction_set)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking transaction_set changes.
+
+  ## Examples
+
+      iex> change_transaction_set(transaction_set)
+      %Ecto.Changeset{source: %TransactionSet{}}
+
+  """
+  def change_transaction_set(%TransactionSet{} = transaction_set) do
+    TransactionSet.changeset(transaction_set, %{})
+  end
 end

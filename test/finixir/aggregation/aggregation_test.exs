@@ -297,4 +297,65 @@ defmodule Finixir.AggregationTest do
       assert %Ecto.Changeset{} = Aggregation.change_party_tag(party_tag)
     end
   end
+
+  describe "transaction_sets" do
+    alias Finixir.Aggregation.TransactionSet
+
+    @valid_attrs %{end_date: ~D[2010-04-17], start_date: ~D[2010-04-17]}
+    @update_attrs %{end_date: ~D[2011-05-18], start_date: ~D[2011-05-18]}
+    @invalid_attrs %{end_date: nil, start_date: nil}
+
+    def transaction_set_fixture(attrs \\ %{}) do
+      {:ok, transaction_set} =
+        attrs
+        |> Enum.into(@valid_attrs)
+        |> Aggregation.create_transaction_set()
+
+      transaction_set
+    end
+
+    test "list_transaction_sets/0 returns all transaction_sets" do
+      transaction_set = transaction_set_fixture()
+      assert Aggregation.list_transaction_sets() == [transaction_set]
+    end
+
+    test "get_transaction_set!/1 returns the transaction_set with given id" do
+      transaction_set = transaction_set_fixture()
+      assert Aggregation.get_transaction_set!(transaction_set.id) == transaction_set
+    end
+
+    test "create_transaction_set/1 with valid data creates a transaction_set" do
+      assert {:ok, %TransactionSet{} = transaction_set} = Aggregation.create_transaction_set(@valid_attrs)
+      assert transaction_set.end_date == ~D[2010-04-17]
+      assert transaction_set.start_date == ~D[2010-04-17]
+    end
+
+    test "create_transaction_set/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Aggregation.create_transaction_set(@invalid_attrs)
+    end
+
+    test "update_transaction_set/2 with valid data updates the transaction_set" do
+      transaction_set = transaction_set_fixture()
+      assert {:ok, %TransactionSet{} = transaction_set} = Aggregation.update_transaction_set(transaction_set, @update_attrs)
+      assert transaction_set.end_date == ~D[2011-05-18]
+      assert transaction_set.start_date == ~D[2011-05-18]
+    end
+
+    test "update_transaction_set/2 with invalid data returns error changeset" do
+      transaction_set = transaction_set_fixture()
+      assert {:error, %Ecto.Changeset{}} = Aggregation.update_transaction_set(transaction_set, @invalid_attrs)
+      assert transaction_set == Aggregation.get_transaction_set!(transaction_set.id)
+    end
+
+    test "delete_transaction_set/1 deletes the transaction_set" do
+      transaction_set = transaction_set_fixture()
+      assert {:ok, %TransactionSet{}} = Aggregation.delete_transaction_set(transaction_set)
+      assert_raise Ecto.NoResultsError, fn -> Aggregation.get_transaction_set!(transaction_set.id) end
+    end
+
+    test "change_transaction_set/1 returns a transaction_set changeset" do
+      transaction_set = transaction_set_fixture()
+      assert %Ecto.Changeset{} = Aggregation.change_transaction_set(transaction_set)
+    end
+  end
 end
