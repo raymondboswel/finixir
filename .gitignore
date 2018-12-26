@@ -42,3 +42,5 @@ npm-debug.log
 /config/*.secret.exs
 
 statement-41-123-148-0.csv
+
+.elixir_ls

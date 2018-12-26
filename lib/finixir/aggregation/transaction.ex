@@ -2,11 +2,11 @@ defmodule Finixir.Aggregation.Transaction do
   use Ecto.Schema
   import Ecto.Changeset
 
-
   schema "transactions" do
     field :amount, :float
     field :transaction_date, :date
     field :transaction_type_id, :id
+    field :transaction_set_id, :id
 
     timestamps()
   end

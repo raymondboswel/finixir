@@ -90,6 +90,22 @@ defmodule Finixir.Aggregation do
   end
 
   @doc """
+  Finds a party by name.
+
+  ## Examples
+
+      iex> find_party("party name")
+      %Party{}
+
+      iex> find_party("Non existent party")
+      nil
+
+  """
+  def find_party(name) do
+    Repo.get_by(Party, %{name: name})
+  end
+
+  @doc """
   Returns an `%Ecto.Changeset{}` for tracking party changes.
 
   ## Examples
@@ -196,6 +212,22 @@ defmodule Finixir.Aggregation do
   """
   def change_transaction_type(%TransactionType{} = transaction_type) do
     TransactionType.changeset(transaction_type, %{})
+  end
+
+  @doc """
+  Finds a transaction_type by name.
+
+  ## Examples
+
+      iex> find_transaction_type("transaction_type name")
+      %TransactionType{}
+
+      iex> find_transaction_type("Non existent transaction_type")
+      nil
+
+  """
+  def find_transaction_type(transaction_type) do
+    Repo.get_by(TransactionType, %{transaction_type: transaction_type})
   end
 
   alias Finixir.Aggregation.Transaction

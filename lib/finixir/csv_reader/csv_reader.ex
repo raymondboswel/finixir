@@ -10,15 +10,18 @@ defmodule Finixir.CsvReader do
       |> Enum.map(fn entry ->
         date = Timex.parse!(Enum.at(entry, 1), "{YYYY}{0M}{0D}")
 
+        party =
+          case Enum.at(entry, 5) do
+            "" -> "Standard Bank Fees"
+            party -> party
+          end
+
         %CsvEntry{
           date: date,
           amount: Enum.at(entry, 3),
           transaction_type: Enum.at(entry, 4),
-          party: Enum.at(entry, 5)
+          party: party
         }
       end)
-
-    IO.inspect(l)
-    IO.puts("Finished reading csv")
   end
 end
