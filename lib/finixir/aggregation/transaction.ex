@@ -14,7 +14,7 @@ defmodule Finixir.Aggregation.Transaction do
   @doc false
   def changeset(transaction, attrs) do
     transaction
-    |> cast(attrs, [:transaction_date, :amount])
+    |> cast(attrs, [:transaction_date, :transaction_set_id, :transaction_type_id, :amount])
     |> validate_required([:transaction_date, :amount])
   end
 end

@@ -4,7 +4,7 @@ defmodule Finixir.Aggregation.TransactionProcessor do
   def process_transactions(start_date, end_date, file) do
     csv_entries = Finixir.CsvReader.read_csv()
 
-    transaction_set =
+    {:ok, transaction_set} =
       Aggregation.create_transaction_set(%{start_date: start_date, end_date: end_date})
 
     csv_entries
@@ -25,7 +25,7 @@ defmodule Finixir.Aggregation.TransactionProcessor do
         case Aggregation.find_transaction_type(csv_entry.transaction_type) do
           nil ->
             {:ok, transaction_type} =
-              Aggregation.create_transaction_type(csv_entry.transaction_type)
+              Aggregation.create_transaction_type(%{transaction_type: csv_entry.transaction_type})
 
             transaction_type
 
@@ -38,8 +38,11 @@ defmodule Finixir.Aggregation.TransactionProcessor do
           amount: csv_entry.amount,
           transaction_date: csv_entry.date,
           transaction_type_id: transaction_type.id,
-          transaction_set_id: transaction_set.id
+          transaction_set_id: transaction_set.id,
+          party_id: party.id
         })
+
+      IO.inspect(transaction)
     end)
 
     #  TODO: Wrap in ecto.multi
