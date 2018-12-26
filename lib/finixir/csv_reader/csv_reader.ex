@@ -1,7 +1,7 @@
 defmodule Finixir.CsvReader do
-  def read_csv() do
+  def read_csv(file) do
     IO.puts("Reading csv")
-    csv_stream = File.stream!("statement-41-123-148-0.csv") |> CSV.decode()
+    csv_stream = File.stream!(file) |> CSV.decode()
     # e = Stream.each(csv_stream, fn transaction -> IO.inspect(transaction) end)
     l =
       Enum.to_list(csv_stream)
