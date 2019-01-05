@@ -1,4 +1,4 @@
-defmodule FinixirWeb.PartyTagController do
+defmodule FinixirWeb.CsvController do
   use FinixirWeb, :controller
 
   alias Finixir.Aggregation

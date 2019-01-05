@@ -21,6 +21,8 @@ defmodule Finixir.Aggregation.TransactionProcessor do
             party
         end
 
+      IO.inspect(party)
+
       transaction_type =
         case Aggregation.find_transaction_type(csv_entry.transaction_type) do
           nil ->
