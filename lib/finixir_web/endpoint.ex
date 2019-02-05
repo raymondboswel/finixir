@@ -42,5 +42,7 @@ defmodule FinixirWeb.Endpoint do
     key: "_finixir_key",
     signing_salt: "MROM5By3"
 
+  plug CORSPlug, origin: ["http://localhost:4200"]
+
   plug FinixirWeb.Router
 end

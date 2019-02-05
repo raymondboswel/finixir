@@ -12,10 +12,9 @@ defmodule Finixir.Calculation do
         join: p in Party,
         where: txn.party_id == p.id,
         group_by: p.name,
-        select: {sum(txn.amount), p.name}
+        select: {p.name, sum(txn.amount)}
 
     res = Repo.all(q)
-    IO.inspect(res)
   end
 
   def total_transactions_per_tag() do
@@ -28,9 +27,8 @@ defmodule Finixir.Calculation do
         join: txn in Transaction,
         on: txn.party_id == p.id,
         group_by: t.tag,
-        select: {sum(txn.amount), t.tag}
+        select: {t.tag, sum(txn.amount)}
 
     res = Repo.all(q)
-    IO.inspect(res)
   end
 end

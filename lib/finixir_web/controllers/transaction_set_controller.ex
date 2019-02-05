@@ -11,13 +11,42 @@ defmodule FinixirWeb.TransactionSetController do
     render(conn, "index.json", transaction_sets: transaction_sets)
   end
 
-  def create(conn, %{"transaction_set" => transaction_set_params}) do
-    with {:ok, %TransactionSet{} = transaction_set} <- Aggregation.create_transaction_set(transaction_set_params) do
-      conn
-      |> put_status(:created)
-      |> put_resp_header("location", Routes.transaction_set_path(conn, :show, transaction_set))
-      |> render("show.json", transaction_set: transaction_set)
+  def create(conn, transaction_params) do
+    IO.inspect(transaction_params)
+    IO.inspect(transaction_params["file"].path)
+
+    if !File.exists?("/home/raymond/finixir") do
+      res = File.mkdir("/home/raymond/finixir")
     end
+
+    file_storage_path =
+      "/home/raymond/finixir/" <>
+        transaction_params["start_date"] <>
+        "_" <> Integer.to_string(:os.system_time(:millisecond))
+
+    res =
+      File.copy(
+        transaction_params["file"].path,
+        file_storage_path
+      )
+
+    IO.inspect(res)
+
+    Finixir.Aggregation.TransactionProcessor.process_transactions(
+      transaction_params["start_date"],
+      transaction_params["end_date"],
+      file_storage_path
+    )
+
+    send_resp(conn, :ok, "")
+    # render(conn, "agreement.json", agreement: agreement)
+
+    # with {:ok, %Transaction{} = transaction} <- Aggregation.create_transaction(transaction_params) do
+    #   conn
+    #   |> put_status(:created)
+    #   |> put_resp_header("location", Routes.transaction_path(conn, :show, transaction))
+    #   |> render("show.json", transaction: transaction)
+    # end
   end
 
   def show(conn, %{"id" => id}) do
@@ -28,7 +57,8 @@ defmodule FinixirWeb.TransactionSetController do
   def update(conn, %{"id" => id, "transaction_set" => transaction_set_params}) do
     transaction_set = Aggregation.get_transaction_set!(id)
 
-    with {:ok, %TransactionSet{} = transaction_set} <- Aggregation.update_transaction_set(transaction_set, transaction_set_params) do
+    with {:ok, %TransactionSet{} = transaction_set} <-
+           Aggregation.update_transaction_set(transaction_set, transaction_set_params) do
       render(conn, "show.json", transaction_set: transaction_set)
     end
   end

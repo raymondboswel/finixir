@@ -11,8 +11,11 @@ defmodule FinixirWeb.TransactionSetView do
   end
 
   def render("transaction_set.json", %{transaction_set: transaction_set}) do
-    %{id: transaction_set.id,
+    %{
+      id: transaction_set.id,
       start_date: transaction_set.start_date,
-      end_date: transaction_set.end_date}
+      end_date: transaction_set.end_date,
+      title: transaction_set.title
+    }
   end
 end
