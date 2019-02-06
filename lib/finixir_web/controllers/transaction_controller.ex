@@ -11,42 +11,18 @@ defmodule FinixirWeb.TransactionController do
     render(conn, "index.json", transactions: transactions)
   end
 
-  def create(conn, transaction_params) do
-    IO.inspect(transaction_params)
-    IO.inspect(transaction_params["file"].path)
+  def enriched_transactions(conn, _params) do
+    transactions = Aggregation.list_transactions()
+    render(conn, "enriched_transactions.json", transactions: transactions)
+  end
 
-    if !File.exists?("/home/raymond/finixir") do
-      res = File.mkdir("/home/raymond/finixir")
+  def create(conn, %{"transaction" => transaction_params}) do
+    with {:ok, %Transaction{} = transaction} <- Aggregation.create_transaction(transaction_params) do
+      conn
+      |> put_status(:created)
+      |> put_resp_header("location", Routes.transaction_path(conn, :show, transaction))
+      |> render("show.json", transaction: transaction)
     end
-
-    file_storage_path =
-      "/home/raymond/finixir/" <>
-        transaction_params["start_date"] <>
-        "_" <> Integer.to_string(:os.system_time(:millisecond))
-
-    res =
-      File.copy(
-        transaction_params["file"].path,
-        file_storage_path
-      )
-
-    IO.inspect(res)
-
-    Finixir.Aggregation.TransactionProcessor.process_transactions(
-      transaction_params["start_date"],
-      transaction_params["end_date"],
-      file_storage_path
-    )
-
-    send_resp(conn, :ok, "")
-    # render(conn, "agreement.json", agreement: agreement)
-
-    # with {:ok, %Transaction{} = transaction} <- Aggregation.create_transaction(transaction_params) do
-    #   conn
-    #   |> put_status(:created)
-    #   |> put_resp_header("location", Routes.transaction_path(conn, :show, transaction))
-    #   |> render("show.json", transaction: transaction)
-    # end
   end
 
   def show(conn, %{"id" => id}) do

@@ -7,6 +7,8 @@ defmodule Finixir.Aggregation do
   alias Finixir.Repo
 
   alias Finixir.Aggregation.Party
+  alias Finixir.Aggregation.PartyTag
+  alias Finixir.Aggregation.Tag
 
   @doc """
   Returns the list of parties.
@@ -241,8 +243,20 @@ defmodule Finixir.Aggregation do
       [%Transaction{}, ...]
 
   """
-  def list_transactions do
-    Repo.all(Transaction)
+  def list_transactions(transaction_set_id) do
+    q =
+      from(t in Transaction,
+        join: p in Party,
+        on: t.party_id == p.id,
+        join: pt in PartyTag,
+        on: p.id == pt.party_id,
+        join: tag in Tag,
+        on: tag.id == pt.tag_id,
+        where: t.transaction_set_id == ^transaction_set_id,
+        preload: [party: :tags]
+      )
+
+    Repo.all(q)
   end
 
   @doc """
@@ -325,8 +339,6 @@ defmodule Finixir.Aggregation do
   def change_transaction(%Transaction{} = transaction) do
     Transaction.changeset(transaction, %{})
   end
-
-  alias Finixir.Aggregation.Tag
 
   @doc """
   Returns the list of tags.
@@ -421,8 +433,6 @@ defmodule Finixir.Aggregation do
   def change_tag(%Tag{} = tag) do
     Tag.changeset(tag, %{})
   end
-
-  alias Finixir.Aggregation.PartyTag
 
   @doc """
   Returns the list of parties_tags.
