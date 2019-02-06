@@ -1,11 +1,15 @@
 defmodule Finixir.Aggregation.TransactionProcessor do
   alias Finixir.Aggregation
 
-  def process_transactions(start_date, end_date, file) do
+  def process_transactions(transaction_set_title, start_date, end_date, file) do
     csv_entries = Finixir.CsvReader.read_csv(file)
 
     {:ok, transaction_set} =
-      Aggregation.create_transaction_set(%{start_date: start_date, end_date: end_date})
+      Aggregation.create_transaction_set(%{
+        title: transaction_set_title,
+        start_date: start_date,
+        end_date: end_date
+      })
 
     csv_entries
     |> Enum.each(fn csv_entry ->

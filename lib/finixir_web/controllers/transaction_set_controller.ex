@@ -33,6 +33,7 @@ defmodule FinixirWeb.TransactionSetController do
     IO.inspect(res)
 
     Finixir.Aggregation.TransactionProcessor.process_transactions(
+      transaction_params["title"],
       transaction_params["start_date"],
       transaction_params["end_date"],
       file_storage_path
