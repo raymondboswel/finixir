@@ -3,6 +3,7 @@ defmodule FinixirWeb.PartyController do
 
   alias Finixir.Aggregation
   alias Finixir.Aggregation.Party
+  alias Finixir.Aggregation.PartyTag
 
   action_fallback FinixirWeb.FallbackController
 
@@ -37,6 +38,15 @@ defmodule FinixirWeb.PartyController do
     party = Aggregation.get_party!(id)
 
     with {:ok, %Party{}} <- Aggregation.delete_party(party) do
+      send_resp(conn, :no_content, "")
+    end
+  end
+
+  def remove_tag_from_party(conn, %{"party_id" => party_id, "tag_id" => tag_id}) do
+    party_tag =
+      Finixir.Repo.get_by(Finixir.Aggregation.PartyTag, party_id: party_id, tag_id: tag_id)
+
+    with {:ok, %PartyTag{}} <- Finixir.Repo.delete(party_tag) do
       send_resp(conn, :no_content, "")
     end
   end

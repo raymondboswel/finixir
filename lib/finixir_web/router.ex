@@ -23,6 +23,12 @@ defmodule FinixirWeb.Router do
   scope "/api", FinixirWeb do
     pipe_through :api
 
+    get "/transaction_sets/:id/transactions",
+        TransactionSetController,
+        :transaction_set_transactions
+
+    delete "parties/:party_id/tag/:tag_id", PartyController, :remove_tag_from_party
+
     resources "/parties", PartyController, except: [:new, :edit]
     resources "/transaction_types", TransactionTypeController, except: [:new, :edit]
     resources "/transactions", TransactionController, except: [:new, :edit]

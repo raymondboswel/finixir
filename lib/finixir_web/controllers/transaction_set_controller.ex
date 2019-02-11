@@ -50,6 +50,11 @@ defmodule FinixirWeb.TransactionSetController do
     # end
   end
 
+  def transaction_set_transactions(conn, %{"id" => transaction_set_id}) do
+    transactions = Aggregation.list_transactions(transaction_set_id)
+    render(conn, "transaction_set_transactions.json", transactions: transactions)
+  end
+
   def show(conn, %{"id" => id}) do
     transaction_set = Aggregation.get_transaction_set!(id)
     render(conn, "show.json", transaction_set: transaction_set)

@@ -244,19 +244,32 @@ defmodule Finixir.Aggregation do
 
   """
   def list_transactions(transaction_set_id) do
-    q =
-      from(t in Transaction,
-        join: p in Party,
-        on: t.party_id == p.id,
-        join: pt in PartyTag,
-        on: p.id == pt.party_id,
-        join: tag in Tag,
-        on: tag.id == pt.tag_id,
-        where: t.transaction_set_id == ^transaction_set_id,
-        preload: [party: :tags]
-      )
+    # q =
+    #   from(t in Transaction,
+    #     left_join: p in Party,
+    #     on: t.party_id == p.id,
+    #     left_join: pt in PartyTag,
+    #     on: p.id == pt.party_id,
+    #     left_join: tag in Tag,
+    #     on: tag.id == pt.tag_id,
+    #     where: t.transaction_set_id == ^transaction_set_id,
+    #     preload: [party: :tags]
+    #   )
 
-    Repo.all(q)
+    # Repo.all(q)
+
+    IO.inspect(String.to_integer(transaction_set_id))
+    txns = Finixir.Aggregation.Transaction |> order_by(asc: :transaction_date) |> Repo.all()
+    # IO.inspect(txns)
+
+    res =
+      txns
+      |> Enum.filter(fn t -> t.transaction_set_id == String.to_integer(transaction_set_id) end)
+      |> Repo.preload(party: :tags)
+
+    IO.inspect(res)
+
+    res
   end
 
   @doc """

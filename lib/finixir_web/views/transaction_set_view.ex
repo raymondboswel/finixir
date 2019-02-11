@@ -1,6 +1,7 @@
 defmodule FinixirWeb.TransactionSetView do
   use FinixirWeb, :view
   alias FinixirWeb.TransactionSetView
+  alias FinixirWeb.TransactionView
 
   def render("index.json", %{transaction_sets: transaction_sets}) do
     %{data: render_many(transaction_sets, TransactionSetView, "transaction_set.json")}
@@ -17,5 +18,9 @@ defmodule FinixirWeb.TransactionSetView do
       end_date: transaction_set.end_date,
       title: transaction_set.title
     }
+  end
+
+  def render("transaction_set_transactions.json", %{transactions: transactions}) do
+    %{data: render_many(transactions, TransactionView, "transaction_set_transaction.json")}
   end
 end

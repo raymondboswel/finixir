@@ -11,11 +11,6 @@ defmodule FinixirWeb.TransactionController do
     render(conn, "index.json", transactions: transactions)
   end
 
-  def enriched_transactions(conn, _params) do
-    transactions = Aggregation.list_transactions()
-    render(conn, "enriched_transactions.json", transactions: transactions)
-  end
-
   def create(conn, %{"transaction" => transaction_params}) do
     with {:ok, %Transaction{} = transaction} <- Aggregation.create_transaction(transaction_params) do
       conn
