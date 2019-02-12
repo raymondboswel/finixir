@@ -11,7 +11,6 @@ defmodule FinixirWeb.TagView do
   end
 
   def render("tag.json", %{tag: tag}) do
-    %{id: tag.id,
-      tag: tag.tag}
+    %{id: tag.id, name: tag.tag}
   end
 end

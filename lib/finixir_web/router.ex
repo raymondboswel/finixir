@@ -32,6 +32,7 @@ defmodule FinixirWeb.Router do
     resources "/parties", PartyController, except: [:new, :edit]
     resources "/transaction_types", TransactionTypeController, except: [:new, :edit]
     resources "/transactions", TransactionController, except: [:new, :edit]
+    resources "/tags", TagController
     resources "/parties_tags", PartyTagController, except: [:new, :edit]
     resources "/transaction_sets", TransactionSetController, except: [:new, :edit]
   end
